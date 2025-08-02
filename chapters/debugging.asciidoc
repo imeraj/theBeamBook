@@ -12,7 +12,7 @@ In addition to these topics, this chapter will also discuss different testing me
 
 You will become acquainted with the "let it crash" principle and the ways to effectively implement it within your system. You'll gain insights into the workings of exceptions and supervisor tree design.
 
-By the end of this chapter, you'll be equipped with the knowledge to systematically test your system and its individual components. You will be able to identify common mistakes and problems, and  possibly even picking up some debugging philosophy along the way. 
+By the end of this chapter, you'll be equipped with the knowledge to systematically test your system and its individual components. You will be able to identify common mistakes and problems, and  possibly even picking up some debugging philosophy along the way.
 
 
 === Debugging Philosophy
@@ -49,7 +49,7 @@ Check **process message queues** using:
 process_info(Pid, messages).
 ```
 A long message queue could indicate a performance bottleneck.
-  
+
 Inspect **ETS tables** and memory usage:
 ```erlang
 ets:info(my_table, size).
@@ -163,7 +163,7 @@ process_request({error, _}) -> handle_error().
 
 ===== **4. Implementing Fail-Fast Mechanisms**
 
-Erlang’s **Let It Crash** philosophy means processes should **fail quickly** when an error occurs instead of propagating invalid state. 
+Erlang’s **Let It Crash** philosophy means processes should **fail quickly** when an error occurs instead of propagating invalid state.
 
 Example: Enforcing fail-fast behavior with guards:
 ```erlang
@@ -197,7 +197,7 @@ Deadlocks occur when two or more processes are waiting for each other to release
 Deadlocks in Erlang typically arise due to:
 
 - **Circular dependencies**: Two processes each waiting for a resource held by the other.
-- **Misused locks**: When using `gen_server` or `gen_fsm`, incorrect ordering of message handling can lead to deadlocks.
+- **Misused locks**: When using `gen_server` or `gen_statem`, incorrect ordering of message handling can lead to deadlocks.
 - **Blocking calls inside `gen_server`**: Calling `gen_server:call/2` within a `handle_call/3` callback can cause the process to block indefinitely.
 
 To identify deadlocks:
@@ -306,7 +306,7 @@ erlang:garbage_collect(Pid).
 ```
 This reclaims memory used by binaries if the process is no longer referencing them.
 This can be important in relaying processes that are not using the binaries anymore,
-but they hang on to a reference to them. Remember that binaries are reference counted 
+but they hang on to a reference to them. Remember that binaries are reference counted
 and live across processes.
 
 **Monitor binary memory allocation**:
@@ -711,7 +711,7 @@ Understanding and diagnosing issues within the Erlang runtime system (BEAM) can 
 
 GDB is a powerful tool for debugging applications at the machine level, offering insights into the execution of compiled programs. When applied to the BEAM, GDB allows developers to inspect the state of the Erlang virtual machine during execution or after a crash.
 
-To effectively use GDB with the BEAM, it's beneficial to compile the Erlang runtime system with debugging symbols. This compilation provides detailed information during debugging sessions. 
+To effectively use GDB with the BEAM, it's beneficial to compile the Erlang runtime system with debugging symbols. This compilation provides detailed information during debugging sessions.
 
 See <<Alternative Beam emulator builds>> for instructions on compiling and running
 a version of Erlang with debugging information.
@@ -793,7 +793,7 @@ etp-process-info <process_pointer>
 ```
 Replace `<process_pointer>` with the actual pointer to the process control block (PCB) you're interested in. These macros simplify the process of extracting meaningful data from the BEAM's internal structures.
 
-For a comprehensive guide on debugging the BEAM using GDB and employing these macros, refer to link:https://max-au.com/2022/03/29/debugging-the-beam/[Debugging the BEAM] and link:https://www.erlang.org/doc/system/debugging.html#debug-emulator[Debug emulator documentation]. These resources provide in-depth instructions and examples to assist you in effectively diagnosing and resolving issues within the Erlang runtime system. 
+For a comprehensive guide on debugging the BEAM using GDB and employing these macros, refer to link:https://max-au.com/2022/03/29/debugging-the-beam/[Debugging the BEAM] and link:https://www.erlang.org/doc/system/debugging.html#debug-emulator[Debug emulator documentation]. These resources provide in-depth instructions and examples to assist you in effectively diagnosing and resolving issues within the Erlang runtime system.
 
 
 ==== SystemTap and DTrace
@@ -807,7 +807,7 @@ Using these tools with Erlang can provide deep insights into the behavior of the
 SystemTap and DTrace operate by inserting dynamically generated probes into running kernel and user-space applications. These probes capture real-time data, allowing developers to inspect and analyze program execution without stopping or modifying the application.
 
 - **SystemTap**: Developed for Linux, SystemTap enables monitoring of kernel events, user-space programs, and runtime behavior using scripting. It is commonly used for profiling, fault detection, and system introspection.
-  
+
 - **DTrace**: Originally developed by Sun Microsystems for Solaris, DTrace provides similar tracing capabilities with a robust scripting language. It is widely used on macOS, FreeBSD, and SmartOS.
 
 Both tools allow developers to measure function execution times, trace system calls, inspect memory usage, and capture event-based data critical for optimizing performance and debugging complex applications.
@@ -821,7 +821,7 @@ To use SystemTap and DTrace with Erlang, you need to enable the necessary tracin
 SystemTap scripts rely on user-space markers embedded in the BEAM emulator. These markers allow SystemTap to hook into various internal events. To use SystemTap with Erlang:
 
 - **Ensure SystemTap is installed** (on Linux distributions such as Ubuntu, Fedora, or CentOS):
-  
+
 ```sh
 sudo apt-get install systemtap systemtap-sdt-dev
 ```
@@ -897,5 +897,3 @@ sudo dtrace -s my_script.d
 ```
 
 This provides a non-intrusive way to monitor the internal behavior of the BEAM virtual machine in real-time.
-
-
